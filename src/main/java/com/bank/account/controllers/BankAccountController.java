@@ -32,13 +32,13 @@ public class BankAccountController {
     /**
      * make a deposit in my account
      *
-     * @param id Interger client Id
+     * @param id int account Id
      * @param amount Double client amount to withdraw
      * @return AccountOpDto client account operation info
      */
     @ApiOperation(value = "US1 : make a deposit in my account")
     @PostMapping(value = "/Account/deposit")
-    public ResponseEntity<AccountOpDto> deposit(@RequestBody Integer id, @RequestBody Double amount) {
+    public ResponseEntity<AccountOpDto> deposit(@RequestBody int id, @RequestBody Double amount) {
         AccountOpDto newOperation = null;
         try {
             newOperation = bankAccountService.deposit(id,amount);
@@ -60,13 +60,13 @@ public class BankAccountController {
     /**
      * make a withdrawal from my account
      *
-     * @param id Interger client Id
+     * @param id int account Id
      * @param amount Double client amount to withdraw
      * @return AccountOpDto client account operation info
      */
     @ApiOperation(value = "US2: make a withdrawal from my account")
     @PostMapping(value = "/Account/withdraw")
-    public ResponseEntity<AccountOpDto> withdraw(@RequestBody Integer id, @RequestBody Double amount) {
+    public ResponseEntity<AccountOpDto> withdraw(@RequestBody int id, @RequestBody Double amount) {
         AccountOpDto newOperation = null;
         try {
             newOperation = bankAccountService.withdraw(id,amount);
@@ -88,12 +88,12 @@ public class BankAccountController {
     /**
      *  see the history (operation, date, amount, balance) of my operations
      *
-     * @param id Interger client Id
+     * @param id int account Id
      * @return List<AccountOpDto>  bank account operations history
      */
     @ApiOperation(value = "US3: see the history (operation, date, amount, balance) of my operations")
     @GetMapping(value="/Account/history/{id}")
-    public ResponseEntity<List<AccountOpDto>> getOperationsHistory(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<AccountOpDto>> getOperationsHistory(@PathVariable("id") int id) {
         List<AccountOpDto> history = null;
         try {
             history = bankAccountService
@@ -107,12 +107,12 @@ public class BankAccountController {
     /**
      * Get your bank account balance
      *
-     * @param id Interger client Id
+     * @param id int account Id
      * @return Double balance
      */
     @ApiOperation(value = "US3: Get your bank account balance")
     @GetMapping(value="/Account/balance/{id}")
-    public ResponseEntity<Double> getBalance(@PathVariable("id") Integer id) {
+    public ResponseEntity<Double> getBalance(@PathVariable("id") int id) {
         Double balance = null;
         try {
             balance = bankAccountService.getBalance(id);

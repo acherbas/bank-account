@@ -30,12 +30,19 @@ public class BankAccountServiceImpl implements BankAccountService {
     private ModelMapper modelMapper;
 
 
+    /**
+     * make a deposit in my account
+     * @param accountId int account id
+     * @param amount Double amount to deposit
+     * @return AccountOpDto deposit operation
+     * @throws AccountException
+     */
     @Override
-    public AccountOpDto deposit(Integer id, Double amount) throws AccountException {
+    public AccountOpDto deposit(int accountId, Double amount) throws AccountException {
         AccountOp accountOp = new AccountOp(OperationType.DEPOSIT, amount);
-        Account account = accountRepository.findById(id);
+        Account account = accountRepository.findById(accountId);
         if (account == null) {
-            throw new AccountException("Account not found " + id);
+            throw new AccountException("Account not found " + accountId);
         }
         accountOp.setAccount(account);
 
@@ -44,14 +51,20 @@ public class BankAccountServiceImpl implements BankAccountService {
         return modelMapper.map(accountOpRepository.save(accountOp), AccountOpDto.class);
     }
 
-    // MANDATORY: Transaction must be created before.
+    /**
+     * make a withdrawal from my account
+     * @param accountId
+     * @param amount Double amount to withdraw
+     * @return AccountOpDto withdrawal operation
+     * @throws AccountTransactionException
+     */
     @Transactional(propagation = Propagation.MANDATORY )
     @Override
-    public AccountOpDto withdraw(Integer id, Double amount) throws AccountTransactionException {
+    public AccountOpDto withdraw(int accountId, Double amount) throws AccountTransactionException {
         AccountOp accountOp = new AccountOp(OperationType.WITHDRAWAL, amount);
-        Account account = accountRepository.findById(id);
+        Account account = accountRepository.findById(accountId);
         if (account == null) {
-            throw new AccountTransactionException("Account not found " + id);
+            throw new AccountTransactionException("Account not found " + accountId);
         }
         accountOp.setAccount(account);
 
@@ -59,18 +72,24 @@ public class BankAccountServiceImpl implements BankAccountService {
         double newBalance = account.getBalance() + amount;
         if (newBalance< 0) {
             throw new AccountTransactionException(
-                    "The money in the account '" + id + "' is not enough (" + account.getBalance() + ")");
+                    "The money in the account '" + accountId + "' is not enough (" + account.getBalance() + ")");
         }
         account.setBalance(newBalance);
         accountRepository.save(account);
         return modelMapper.map(accountOpRepository.save(accountOp), AccountOpDto.class);
     }
 
+    /**
+     * get the history (operation, date, amount, balance) of my operations
+     * @param accountId int account id
+     * @return List<AccountOpDto> list of account operations
+     * @throws AccountException
+     */
     @Override
-    public List<AccountOpDto> getOperationsHistory(Integer id) throws AccountException {
-        Account account = accountRepository.findById(id);
+    public List<AccountOpDto> getOperationsHistory(int accountId) throws AccountException {
+        Account account = accountRepository.findById(accountId);
         if (account == null) {
-            throw new AccountException("Account not found " + id);
+            throw new AccountException("Account not found " + accountId);
         }
         List<AccountOp> accountOps = accountOpRepository.findAll();
         return accountOps
@@ -79,11 +98,17 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * get balance of my account
+     * @param accountId int account id
+     * @return Double account balance
+     * @throws AccountException
+     */
     @Override
-    public Double getBalance(Integer id) throws AccountException {
-        Account account = accountRepository.findById(id);
+    public Double getBalance(int accountId) throws AccountException {
+        Account account = accountRepository.findById(accountId);
         if (account == null) {
-            throw new AccountException("Account not found " + id);
+            throw new AccountException("Account not found " + accountId);
         }
         return account.getBalance();
     }
