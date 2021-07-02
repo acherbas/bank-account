@@ -15,14 +15,14 @@ In order to save money
 As a bank client
 I want to make a deposit in my account
 #### POST /Account/deposit
-BODY : {"id":1, "amount":1000}
+BODY : {"accountId":1, "amount":1000}
 
 ### US 2:
 In order to retrieve some or all of my savings
 As a bank client
 I want to make a withdrawal from my account
 #### POST /Account/withdraw
-BODY : {"id":1, "amount":1000}
+BODY : {"accountId":1, "amount":1000}
 
 ### US 3:
 In order to check my operations
