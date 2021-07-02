@@ -9,4 +9,4 @@ INSERT INTO account (balance, creation_date, client_id) VALUES (500, NOW(), 1);
 INSERT INTO account_op (amount, operation_date, operation_type, account_id) VALUES
     (1000, NOW(), 'DEPOSIT', 1),
     (-100, NOW(), 'WITHDRAWAL', 1),
-    (200, NOW(), 'WITHDRAWAL', 1);
+    (-200, NOW(), 'WITHDRAWAL', 1);

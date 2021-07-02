@@ -1,5 +1,6 @@
 package com.bank.account.controllers;
 
+import com.bank.account.model.AccountInfo;
 import com.bank.account.model.AccountOpDto;
 import com.bank.account.exception.AccountException;
 import com.bank.account.exception.AccountTransactionException;
@@ -42,7 +43,7 @@ class BankAccountControllerTest {
             deposit.setType(OperationType.DEPOSIT);
             deposit.setAmount(100d);
             deposit.setDate(LocalDateTime.now());
-            when(bankAccountService.deposit(1,100d))
+            when(bankAccountService.deposit(new AccountInfo(1,100d)))
                     .thenReturn(deposit);
 
             AccountOpDto withdraw = new AccountOpDto();
@@ -51,7 +52,7 @@ class BankAccountControllerTest {
             withdraw.setType(OperationType.WITHDRAWAL);
             withdraw.setAmount(100d);
             withdraw.setDate(LocalDateTime.now());
-            when(bankAccountService.withdraw(1,100d))
+            when(bankAccountService.withdraw(new AccountInfo(1,100d)))
                     .thenReturn(withdraw);
         } catch (AccountException | AccountTransactionException e) {
             e.printStackTrace();
@@ -78,27 +79,27 @@ class BankAccountControllerTest {
 
     @Test
     public void deposit() throws Exception {
-        String accountOpJson = "{\"id\":1, \"amount\":100}";
+        String accountOpJson = "{\"accountId\":1, \"amount\":100}";
         mvc.perform(MockMvcRequestBuilders
                 .post("/Account/deposit")
                 .content(accountOpJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.balance").value(100));
     }
 
     @Test
     public void withdraw() throws Exception {
-        String accountOpJson = "{\"id\":1, \"amount\":100}";
+        String accountOpJson = "{\"accountId\":1, \"amount\":100}";
         mvc.perform(MockMvcRequestBuilders
                 .post("/Account/withdraw")
                 .content(accountOpJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.balance").value(0));
     }
 

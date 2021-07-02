@@ -1,11 +1,8 @@
 package com.bank.account.services;
 
-import com.bank.account.model.AccountOpDto;
+import com.bank.account.model.*;
 import com.bank.account.exception.AccountException;
 import com.bank.account.exception.AccountTransactionException;
-import com.bank.account.model.Account;
-import com.bank.account.model.AccountOp;
-import com.bank.account.model.OperationType;
 import com.bank.account.repositories.AccountOpRepository;
 import com.bank.account.repositories.AccountRepository;
 import org.modelmapper.ModelMapper;
@@ -32,47 +29,45 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     /**
      * make a deposit in my account
-     * @param accountId int account id
-     * @param amount Double amount to deposit
+     * @param accountInfo account info (accountId, amount)
      * @return AccountOpDto deposit operation
      * @throws AccountException
      */
     @Override
-    public AccountOpDto deposit(int accountId, Double amount) throws AccountException {
-        AccountOp accountOp = new AccountOp(OperationType.DEPOSIT, amount);
-        Account account = accountRepository.findById(accountId);
+    public AccountOpDto deposit(AccountInfo accountInfo) throws AccountException {
+        AccountOp accountOp = new AccountOp(OperationType.DEPOSIT, accountInfo.getAmount());
+        Account account = accountRepository.findById(accountInfo.getAccountId());
         if (account == null) {
-            throw new AccountException("Account not found " + accountId);
+            throw new AccountException("Account not found " + accountInfo.getAccountId());
         }
         accountOp.setAccount(account);
 
-        account.setBalance(account.getBalance() + amount);
+        account.setBalance(account.getBalance() + accountInfo.getAmount());
         accountRepository.save(account);
         return modelMapper.map(accountOpRepository.save(accountOp), AccountOpDto.class);
     }
 
     /**
      * make a withdrawal from my account
-     * @param accountId
-     * @param amount Double amount to withdraw
+     * @param accountInfo account info (accountId, amount)
      * @return AccountOpDto withdrawal operation
      * @throws AccountTransactionException
      */
     @Transactional(propagation = Propagation.MANDATORY )
     @Override
-    public AccountOpDto withdraw(int accountId, Double amount) throws AccountTransactionException {
-        AccountOp accountOp = new AccountOp(OperationType.WITHDRAWAL, amount);
-        Account account = accountRepository.findById(accountId);
+    public AccountOpDto withdraw(AccountInfo accountInfo) throws AccountTransactionException {
+        AccountOp accountOp = new AccountOp(OperationType.WITHDRAWAL, accountInfo.getAmount());
+        Account account = accountRepository.findById(accountInfo.getAccountId());
         if (account == null) {
-            throw new AccountTransactionException("Account not found " + accountId);
+            throw new AccountTransactionException("Account not found " + accountInfo.getAccountId());
         }
         accountOp.setAccount(account);
 
-        amount = amount > 0 ? (-1 * amount) : amount;
+        Double amount = accountInfo.getAmount() > 0 ? (-1 * accountInfo.getAmount()) : accountInfo.getAmount();
         double newBalance = account.getBalance() + amount;
         if (newBalance< 0) {
             throw new AccountTransactionException(
-                    "The money in the account '" + accountId + "' is not enough (" + account.getBalance() + ")");
+                    "The money in the account '" + accountInfo.getAccountId() + "' is not enough (" + account.getBalance() + ")");
         }
         account.setBalance(newBalance);
         accountRepository.save(account);

@@ -1,5 +1,6 @@
 package com.bank.account.services;
 
+import com.bank.account.model.AccountInfo;
 import com.bank.account.model.AccountOpDto;
 import com.bank.account.exception.AccountException;
 import com.bank.account.exception.AccountTransactionException;
@@ -64,7 +65,7 @@ class BankAccountServiceTest {
     void deposit() {
         AccountOpDto deposit = null;
         try {
-            deposit = bankAccountService.deposit(1,100d);
+            deposit = bankAccountService.deposit(new AccountInfo(1,100d));
             assertNotNull(deposit);
             //assertEquals(deposit.getBalance(), 1100d);
         } catch (AccountException e) {
@@ -77,7 +78,7 @@ class BankAccountServiceTest {
     void withdraw() {
         AccountOpDto withdraw = null;
         try {
-            withdraw = bankAccountService.withdraw(1,100d);
+            withdraw = bankAccountService.withdraw(new AccountInfo(1,100d));
             assertNotNull(withdraw);
             //assertEquals(withdraw.getAmount(), 900d);
         } catch (AccountTransactionException e) {

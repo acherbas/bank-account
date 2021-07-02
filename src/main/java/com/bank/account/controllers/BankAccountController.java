@@ -1,5 +1,6 @@
 package com.bank.account.controllers;
 
+import com.bank.account.model.AccountInfo;
 import com.bank.account.model.AccountOpDto;
 import com.bank.account.exception.AccountException;
 import com.bank.account.exception.AccountTransactionException;
@@ -32,16 +33,15 @@ public class BankAccountController {
     /**
      * make a deposit in my account
      *
-     * @param id int account Id
-     * @param amount Double client amount to withdraw
+     * @param accountInfo account info (accountId, amount)
      * @return AccountOpDto client account operation info
      */
     @ApiOperation(value = "US1 : make a deposit in my account")
     @PostMapping(value = "/Account/deposit")
-    public ResponseEntity<AccountOpDto> deposit(@RequestBody int id, @RequestBody Double amount) {
+    public ResponseEntity<AccountOpDto> deposit(@RequestBody AccountInfo accountInfo) {
         AccountOpDto newOperation = null;
         try {
-            newOperation = bankAccountService.deposit(id,amount);
+            newOperation = bankAccountService.deposit(accountInfo);
         } catch (AccountException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -60,16 +60,15 @@ public class BankAccountController {
     /**
      * make a withdrawal from my account
      *
-     * @param id int account Id
-     * @param amount Double client amount to withdraw
+     * @param accountInfo account info (accountId, amount)
      * @return AccountOpDto client account operation info
      */
     @ApiOperation(value = "US2: make a withdrawal from my account")
     @PostMapping(value = "/Account/withdraw")
-    public ResponseEntity<AccountOpDto> withdraw(@RequestBody int id, @RequestBody Double amount) {
+    public ResponseEntity<AccountOpDto> withdraw(@RequestBody AccountInfo accountInfo) {
         AccountOpDto newOperation = null;
         try {
-            newOperation = bankAccountService.withdraw(id,amount);
+            newOperation = bankAccountService.withdraw(accountInfo);
         } catch (AccountTransactionException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
