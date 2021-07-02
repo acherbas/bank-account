@@ -1,12 +1,12 @@
 # Bank account kata with Rest API architecture.
 
-Bank account kata using developed using Spring boot Application with H2 embedded database.
+Bank account kata using Spring boot Application with H2 embedded database.
 
 Think of your personal bank account experience When in doubt, go for the simplest solution
 ## Requirments
-• Deposit and Withdrawal
-• Account statement (date, amount, balance)
-• Statement printing
+#### - Deposit and Withdrawal
+#### - Account statement (date, amount, balance)
+#### - Statement printing
 
 ## User Stories
 
@@ -14,22 +14,22 @@ Think of your personal bank account experience When in doubt, go for the simples
 In order to save money
 As a bank client
 I want to make a deposit in my account
-#### POST deposit /Account/deposit
+#### POST /Account/deposit
 BODY : {"id":1, "amount":1000}
 
 ### US 2:
 In order to retrieve some or all of my savings
 As a bank client
 I want to make a withdrawal from my account
-#### POST withdraw /Account/withdraw
+#### POST /Account/withdraw
 BODY : {"id":1, "amount":1000}
 
 ### US 3:
 In order to check my operations
 As a bank client
 I want to see the history (operation, date, amount, balance) of my operations
-#### GET deposit /Account/history/{id}
-#### GET deposit /Account/balance/{id}
+#### GET /Account/history/{id}
+#### GET /Account/balance/{id}
 
 
 ## Getting Started
