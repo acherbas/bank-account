@@ -59,9 +59,11 @@ H2 http://localhost:8080/h2-ui/
 
 ## API Rest documentation :
 Swagger http://localhost:8080/swagger-ui/
+![img.png](img.png)
 
 ## Built With
 * [Spring Boot 2.5.2](https://start.spring.io/)
+* [Java 11](https://www.oracle.com/fr/java/technologies/javase-jdk11-downloads.html)
 * [Maven](https://maven.apache.org/)
 * [Swagger](https://swagger.io/)
 * [H2 database](https://www.h2database.com/)
