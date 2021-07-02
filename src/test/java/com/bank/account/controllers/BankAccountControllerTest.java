@@ -59,6 +59,15 @@ class BankAccountControllerTest {
     }
 
     @Test
+    public void getBalance() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .get("/Account/balance/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void getOperationsHistory() throws Exception {
         mvc.perform(MockMvcRequestBuilders
                 .get("/Account/history/1")
